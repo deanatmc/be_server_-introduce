@@ -3,22 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Minecraft 伺服器狼人殺介紹網頁 </title>
-<!-- Tailwind CSS for utility styling -->
+<title>Minecraft 伺服器狼人殺介紹網頁</title>
+<!-- Tailwind CSS Utility Styling -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- FontAwesome Icons -->
+<!-- FontAwesome 圖示庫 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  /* 導入 Minecraft 經典像素字體 */
+  /* 免下載字型！直接從線上 CDN 載入 Minecraft 經典像素字型 */
   @font-face {
-    font-family: 'Minecraft';
+    font-family: 'MinecraftCustom';
     src: url('https://cdn.jsdelivr.net/gh/SouthSky/Minecraft-Font/Minecraft.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap; /* 免等待：字型下載完前先顯示替代系統字體，下載完自動無縫替換 */
   }
 
   * {
-    font-family: 'Minecraft', "Microsoft JhengHei", sans-serif;
+    /* 使用線上記錄字型，若載入失敗則自動退回系統預設無襯線字體 */
+    font-family: 'MinecraftCustom', "Microsoft JhengHei", "PingFang TC", sans-serif;
     user-select: none;
   }
 
@@ -37,16 +39,16 @@
     background: #f59e0b;
   }
 
-  /* 閃爍文字 */
+  /* 動態霓虹閃爍標題效果 */
   .mc-blink {
-    animation: mcBlink 1s infinite alternate;
+    animation: mcBlink 1.2s infinite alternate;
   }
   @keyframes mcBlink {
     0% { opacity: 1; text-shadow: 0 0 10px #f59e0b; }
-    100% { opacity: 0.4; text-shadow: 0 0 2px #f59e0b; }
+    100% { opacity: 0.5; text-shadow: 0 0 2px #f59e0b; }
   }
 
-  /* Minecraft 經典 3D 框線樣式 */
+  /* Minecraft 經典立體 3D 外框面板 */
   .mc-box {
     background-color: rgba(31, 41, 55, 0.85);
     border: 4px solid #000;
@@ -54,11 +56,12 @@
     backdrop-filter: blur(8px);
   }
 
+  /* 像素風按鈕樣式 */
   .mc-btn {
     background-color: #374151;
     border: 3px solid #000;
     box-shadow: inset -3px -3px 0px #1f2937, inset 3px 3px 0px #6b7280;
-    transition: all 0.1s ease;
+    transition: all 0.15s ease;
   }
   .mc-btn:hover {
     background-color: #4b5563;
@@ -71,17 +74,17 @@
     box-shadow: inset 3px 3px 0px #78350f, inset -3px -3px 0px #fef08a;
   }
 
-  /* 卡片 3D 浮動效果 */
+  /* 卡片 3D 懸浮與傾斜動畫 */
   .card-3d {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     transform-style: preserve-3d;
   }
   .card-3d:hover {
-    transform: translateY(-8px) rotateX(4deg) rotateY(-2deg);
+    transform: translateY(-6px) rotateX(3deg) rotateY(-2deg);
     box-shadow: inset -4px -4px 0px #111827, inset 4px 4px 0px #f59e0b, 0 15px 30px rgba(0,0,0,0.8);
   }
 
-  /* 閃爍彩虹流光邊框 */
+  /* 彩虹發光動態外框 */
   .rainbow-border {
     position: relative;
   }
@@ -92,7 +95,7 @@
     background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff2b, #00f0ff, #0026ff, #7a00ff, #ff00c8, #ff0000);
     background-size: 400%;
     z-index: -1;
-    filter: blur(5px);
+    filter: blur(6px);
     animation: steam 20s linear infinite;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
@@ -106,12 +109,13 @@
     100% { background-position: 0 0; }
   }
 
-  /* 陣營背景螢光氣氛 */
-  .glow-werewolf { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); border-color: #ef4444 !important; }
-  .glow-good { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); border-color: #22c55e !important; }
-  .glow-neutral { box-shadow: 0 0 20px rgba(234, 179, 8, 0.3); border-color: #eab308 !important; }
+  /* 各陣營專屬氛圍燈光 */
+  .glow-werewolf { box-shadow: 0 0 20px rgba(239, 68, 68, 0.35); border-color: #ef4444 !important; }
+  .glow-good { box-shadow: 0 0 20px rgba(34, 197, 94, 0.35); border-color: #22c55e !important; }
+  .glow-neutral { box-shadow: 0 0 20px rgba(234, 179, 8, 0.35); border-color: #eab308 !important; }
+  .glow-server { box-shadow: 0 0 20px rgba(56, 189, 248, 0.35); border-color: #38bdf8 !important; }
 
-  /* 背景 Canvas */
+  /* Canvas 背景粒子 */
   #bg-canvas {
     position: fixed;
     top: 0;
@@ -125,19 +129,13 @@
 </head>
 <body class="bg-gray-950 text-gray-100 min-h-screen relative overflow-x-hidden pb-12">
 
-  <!-- 背景動態粒子與星空 Canvas -->
+  <!-- 背景動態飄落粒子 Canvas -->
   <canvas id="bg-canvas"></canvas>
-
-  <!-- 音效標籤 (使用 Web Audio API 生成，無需外部音效檔) -->
 
   <div class="max-w-6xl mx-auto px-4 pt-8">
 
-    <!-- 頂部標題與主招牌 -->
+    <!-- 頁頭標題卡片 -->
     <header class="mc-box p-6 md:p-8 text-center relative overflow-hidden mb-8 rainbow-border">
-      <!-- 裝飾微光效果 -->
-      <div class="absolute -top-10 -left-10 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
-
       <div class="inline-block bg-amber-500 text-black px-3 py-1 text-xs font-bold rounded-sm mb-3 tracking-widest mc-blink">
         <i class="fa-solid fa-crown mr-1"></i> MINECRAFT SERVER GUIDE
       </div>
@@ -147,22 +145,80 @@
       </h1>
 
       <p class="text-xs md:text-sm text-gray-300 max-w-2xl mx-auto mt-2 leading-relaxed">
-        歡迎來到終極 Minecraft 狼人殺伺服器！請詳細閱讀相關規則與角色技能說明，祝各位戰鬥愉快！
+        歡迎來到 Minecraft 狼人殺伺服器！請詳細閱讀以下連線資訊、規則與角色技能說明。
       </p>
 
-      <!-- 最後更新時間浮報 -->
       <div class="mt-4 inline-flex items-center gap-2 bg-black/50 border border-gray-700 px-4 py-1.5 rounded-full text-xs text-gray-400">
         <i class="fa-regular fa-clock text-amber-400"></i>
         <span>最後更新時間：<span class="text-amber-300 font-mono">2026/08/23 07:00</span></span>
       </div>
     </header>
 
-    <!-- 導覽頁籤與搜尋過濾器區塊 -->
+    <!-- 伺服器連線資訊區塊 -->
+    <section id="section-connection" class="mc-box p-6 mb-8 glow-server card-3d">
+      <div class="flex items-center gap-3 border-b-2 border-sky-900/60 pb-3 mb-4">
+        <div class="w-10 h-10 bg-sky-500/20 border-2 border-sky-500 flex items-center justify-center text-sky-400 text-lg">
+          <i class="fa-solid fa-network-wired"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-sky-400">🌐 伺服器連線方式</h2>
+          <p class="text-xs text-gray-400">使用以下位址與埠號加入伺服器進行遊戲。</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- 連線位址 1 -->
+        <div class="bg-gray-900/80 p-4 border border-sky-900/50 hover:border-sky-400 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs bg-sky-950 text-sky-400 border border-sky-800 px-2 py-0.5 font-bold">主連線位址</span>
+              <span class="text-xs text-gray-400 font-mono">Port: 19134</span>
+            </div>
+            <div class="bg-black/80 text-sky-300 font-mono text-base px-3 py-2 border border-gray-800 rounded mb-3 flex items-center justify-between">
+              <span>dean1208.ddns.net</span>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="copyCmd('dean1208.ddns.net')" class="mc-btn flex-1 py-1.5 text-xs text-gray-200 hover:text-amber-400 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-copy"></i> 複製 IP
+            </button>
+            <button onclick="copyCmd('19134')" class="mc-btn py-1.5 px-3 text-xs text-gray-200 hover:text-amber-400 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-hashtag"></i> 複製 Port
+            </button>
+          </div>
+        </div>
+
+        <!-- 連線位址 2 -->
+        <div class="bg-gray-900/80 p-4 border border-sky-900/50 hover:border-sky-400 transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs bg-sky-950 text-sky-400 border border-sky-800 px-2 py-0.5 font-bold">備用連線位址</span>
+              <span class="text-xs text-gray-400 font-mono">Port: 19134</span>
+            </div>
+            <div class="bg-black/80 text-sky-300 font-mono text-base px-3 py-2 border border-gray-800 rounded mb-3 flex items-center justify-between">
+              <span>dean1208.duckdns.org</span>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="copyCmd('dean1208.duckdns.org')" class="mc-btn flex-1 py-1.5 text-xs text-gray-200 hover:text-amber-400 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-copy"></i> 複製 IP
+            </button>
+            <button onclick="copyCmd('19134')" class="mc-btn py-1.5 px-3 text-xs text-gray-200 hover:text-amber-400 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-hashtag"></i> 複製 Port
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 導覽頁籤與角色搜尋器 -->
     <div class="mc-box p-4 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
-      <!-- 分頁頁籤 -->
       <div class="flex flex-wrap gap-2 w-full md:w-auto justify-center">
         <button onclick="switchTab('all')" id="tab-all" class="mc-btn active px-4 py-2 text-sm text-amber-300 font-bold flex items-center gap-2">
           <i class="fa-solid fa-grip"></i> 全部內容
+        </button>
+        <button onclick="switchTab('connection')" id="tab-connection" class="mc-btn px-4 py-2 text-sm text-gray-300 font-bold flex items-center gap-2">
+          <i class="fa-solid fa-wifi text-sky-400"></i> 連線方式
         </button>
         <button onclick="switchTab('rules')" id="tab-rules" class="mc-btn px-4 py-2 text-sm text-gray-300 font-bold flex items-center gap-2">
           <i class="fa-solid fa-scroll text-yellow-500"></i> 伺服器規章
@@ -175,15 +231,15 @@
         </button>
       </div>
 
-      <!-- 角色搜尋框 -->
+      <!-- 即時關鍵字搜尋過濾 -->
       <div class="relative w-full md:w-64">
-        <input type="text" id="roleSearch" oninput="filterRoles()" placeholder="搜尋角色或能力..." 
+        <input type="text" id="roleSearch" oninput="filterRoles()" placeholder="搜尋角色能力..." 
                class="w-full bg-gray-900 border-2 border-gray-700 text-gray-200 text-xs px-3 py-2 pl-9 focus:outline-none focus:border-amber-500 placeholder-gray-500">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-500 text-xs"></i>
       </div>
     </div>
 
-    <!-- 內容區塊 1: 伺服器規章 -->
+    <!-- 區塊 1: 伺服器規章 -->
     <section id="section-rules" class="mc-box p-6 mb-8 card-3d">
       <div class="flex items-center gap-3 border-b-2 border-gray-700 pb-3 mb-4">
         <div class="w-10 h-10 bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center text-amber-400 text-lg">
@@ -191,53 +247,52 @@
         </div>
         <div>
           <h2 class="text-xl font-bold text-amber-400">一、 伺服器規章</h2>
-          <p class="text-xs text-gray-400">請共同維護良好的遊戲環境，違者將受到處分。</p>
+          <p class="text-xs text-gray-400">請共同維護公平良好的遊戲環境。</p>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded hover:border-amber-500/50 transition">
+        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded">
           <span class="w-6 h-6 bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0 rounded-sm">1</span>
           <p class="text-gray-200 leading-relaxed">不得隨意破壞地圖與建築設施。</p>
         </div>
-        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded hover:border-amber-500/50 transition">
+        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded">
           <span class="w-6 h-6 bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0 rounded-sm">2</span>
           <p class="text-gray-200 leading-relaxed">不得隨意使用指令及指令方塊。</p>
         </div>
-        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded hover:border-amber-500/50 transition">
+        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded">
           <span class="w-6 h-6 bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0 rounded-sm">3</span>
-          <p class="text-gray-200 leading-relaxed">不得故意讓伺服器過載或崩潰。</p>
+          <p class="text-gray-200 leading-relaxed">不得故意讓伺服器崩潰。</p>
         </div>
-        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded hover:border-amber-500/50 transition">
+        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded">
           <span class="w-6 h-6 bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0 rounded-sm">4</span>
-          <p class="text-gray-200 leading-relaxed">如有任何疑問，請向線上管理人員詢問。</p>
+          <p class="text-gray-200 leading-relaxed">如有問題請向管理人員詢問。</p>
         </div>
-        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded hover:border-amber-500/50 transition">
+        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded">
           <span class="w-6 h-6 bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0 rounded-sm">5</span>
-          <p class="text-gray-200 leading-relaxed">此文件所有者保有規章之最終解釋權。</p>
+          <p class="text-gray-200 leading-relaxed">此文件所有者有最終解釋權。</p>
         </div>
-        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded hover:border-amber-500/50 transition">
+        <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded">
           <span class="w-6 h-6 bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0 rounded-sm">6</span>
-          <p class="text-gray-200 leading-relaxed">加入伺服器即自動視為同意所有條款及規定。</p>
+          <p class="text-gray-200 leading-relaxed">加入伺服器皆自動視為同意所有條款及規定。</p>
         </div>
       </div>
     </section>
 
-    <!-- 內容區塊 2: 狼人殺角色及玩法 -->
+    <!-- 區塊 2: 狼人殺角色及玩法 -->
     <div id="section-roles">
       <div class="flex items-center gap-3 mb-6">
         <i class="fa-solid fa-skull-crossbones text-2xl text-red-500"></i>
         <h2 class="text-2xl font-bold text-gray-100 tracking-wide">二、 狼人殺角色及遊戲玩法</h2>
       </div>
 
-      <!-- 1. 狼人陣營 -->
+      <!-- 狼人陣營 -->
       <section class="mc-box p-6 mb-8 glow-werewolf card-3d">
         <div class="flex flex-col md:flex-row md:items-center justify-between border-b-2 border-red-900/60 pb-3 mb-4 gap-2">
           <div class="flex items-center gap-3">
             <span class="px-3 py-1 bg-red-600 text-white font-bold text-xs tracking-wider rounded-sm shadow">
-              <i class="fa-solid fa-wolf-pack-white mr-1"></i> 🐺 狼人陣營
+              <i class="fa-solid fa-paw mr-1"></i> 🐺 狼人陣營
             </span>
-            <span class="text-xs text-red-400 font-bold">🔴 WIN CONDITION</span>
           </div>
           <div class="text-xs bg-red-950/80 border border-red-800/80 px-3 py-1.5 text-red-200">
             <i class="fa-solid fa-trophy text-amber-400 mr-1"></i> 勝利條件：場上僅存狼人陣營的人。
@@ -245,68 +300,32 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 role-grid">
-          <!-- 角色 1 -->
-          <div class="role-card bg-gray-900/80 p-4 border border-red-900/50 hover:border-red-500 transition relative overflow-hidden group">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="text-lg font-bold text-red-400 flex items-center gap-2">
-                <i class="fa-solid fa-paw text-xs"></i> 狼人
-              </h4>
-              <span class="text-[10px] bg-red-900/40 text-red-300 px-2 py-0.5 border border-red-700/50">基礎殺手</span>
-            </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              每晚獲得雪球殺害好人。可以使用 <span class="text-amber-300 border-b border-dashed border-amber-400">牛生怪蛋</span> 來破壞指令方塊。
-            </p>
+          <div class="role-card bg-gray-900/80 p-4 border border-red-900/50 hover:border-red-500 transition">
+            <h4 class="text-lg font-bold text-red-400 mb-1"><i class="fa-solid fa-ghost text-xs"></i> 狼人</h4>
+            <p class="text-xs text-gray-300">每晚獲得雪球，殺害好人；可以使用牛生怪蛋來破壞指令方塊。</p>
           </div>
-
-          <!-- 角色 2 -->
-          <div class="role-card bg-gray-900/80 p-4 border border-red-900/50 hover:border-red-500 transition relative overflow-hidden group">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="text-lg font-bold text-red-400 flex items-center gap-2">
-                <i class="fa-solid fa-bomb text-xs"></i> 炸彈狼
-              </h4>
-              <span class="text-[10px] bg-red-900/40 text-red-300 px-2 py-0.5 border border-red-700/50">定時炸彈</span>
-            </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              第二天晚上開始會拿到 <span class="text-amber-300 border-b border-dashed border-amber-400">選擇植入炸彈者</span>，選擇完後隔天早上被植入者死亡。
-            </p>
+          <div class="role-card bg-gray-900/80 p-4 border border-red-900/50 hover:border-red-500 transition">
+            <h4 class="text-lg font-bold text-red-400 mb-1"><i class="fa-solid fa-bomb text-xs"></i> 炸彈狼</h4>
+            <p class="text-xs text-gray-300">第二天晚上開始會拿到「選擇植入炸彈者」，選擇完後隔天早上被植入者死亡。</p>
           </div>
-
-          <!-- 角色 3 -->
-          <div class="role-card bg-gray-900/80 p-4 border border-red-900/50 hover:border-red-500 transition relative overflow-hidden group">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="text-lg font-bold text-red-400 flex items-center gap-2">
-                <i class="fa-solid fa-moon text-xs"></i> 血狼
-              </h4>
-              <span class="text-[10px] bg-red-900/40 text-red-300 px-2 py-0.5 border border-red-700/50">團滅爆發</span>
-            </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              第一天無法殺人，第二天開始可釋放 <span class="text-red-300 font-bold">技能「血月」</span>：立即變晚上 60 秒，全體狼人獲 <span class="text-amber-300">加速 V / 力量 III</span>，其他玩家獲 <span class="text-purple-400">黑暗 I</span>。血月結束後血狼死亡。
-            </p>
+          <div class="role-card bg-gray-900/80 p-4 border border-red-900/50 hover:border-red-500 transition">
+            <h4 class="text-lg font-bold text-red-400 mb-1"><i class="fa-solid fa-moon text-xs"></i> 血狼</h4>
+            <p class="text-xs text-gray-300">第一天無法殺人，第二天起可使用技能「血月」（變晚上 60 秒，全狼人獲得加速 V / 力量 III，其他玩家獲得黑暗 I，技能結束後血狼死亡）。</p>
           </div>
-
-          <!-- 角色 4 -->
-          <div class="role-card bg-gray-900/80 p-4 border border-red-900/50 hover:border-red-500 transition relative overflow-hidden group">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="text-lg font-bold text-red-400 flex items-center gap-2">
-                <i class="fa-solid fa-skull text-xs"></i> 毒狼
-              </h4>
-              <span class="text-[10px] bg-red-900/40 text-red-300 px-2 py-0.5 border border-red-700/50">持續下毒</span>
-            </div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              第二天晚上開始可以對一個人下毒，被下毒的玩家會在隔天早上死亡。
-            </p>
+          <div class="role-card bg-gray-900/80 p-4 border border-red-900/50 hover:border-red-500 transition">
+            <h4 class="text-lg font-bold text-red-400 mb-1"><i class="fa-solid fa-skull text-xs"></i> 毒狼</h4>
+            <p class="text-xs text-gray-300">第二天晚上開始可以對一個人下毒，被下毒的玩家會在隔天早上死亡。</p>
           </div>
         </div>
       </section>
 
-      <!-- 2. 好人陣營 -->
+      <!-- 好人陣營 -->
       <section class="mc-box p-6 mb-8 glow-good card-3d">
         <div class="flex flex-col md:flex-row md:items-center justify-between border-b-2 border-green-900/60 pb-3 mb-4 gap-2">
           <div class="flex items-center gap-3">
             <span class="px-3 py-1 bg-green-600 text-white font-bold text-xs tracking-wider rounded-sm shadow">
-              <i class="fa-solid fa-shield-cat mr-1"></i> 😇 好人陣營
+              <i class="fa-solid fa-shield mr-1"></i> 😇 好人陣營
             </span>
-            <span class="text-xs text-green-400 font-bold">🟢 WIN CONDITION</span>
           </div>
           <div class="text-xs bg-green-950/80 border border-green-800/80 px-3 py-1.5 text-green-200">
             <i class="fa-solid fa-trophy text-amber-400 mr-1"></i> 勝利條件：消滅狼人 / 存活 5 天 / 獲得水晶
@@ -314,97 +333,75 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 role-grid">
-          <!-- 女巫 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-flask text-xs"></i> 女巫</h4>
             <p class="text-xs text-gray-300">每天早上獲得毒藥和解藥，消滅狼人。</p>
           </div>
-
-          <!-- 鷹眼 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-eye text-xs"></i> 鷹眼</h4>
             <p class="text-xs text-gray-300">每天早上擁有 30 秒的時間，觀看隨機玩家的動向。</p>
           </div>
-
-          <!-- 獵人 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-egg text-xs"></i> 獵人</h4>
-            <p class="text-xs text-gray-300">每天早上獲得 3 顆雞蛋（陷阱），丟出雞蛋，只有狼人陣營踩到會定身 3 秒。</p>
+            <p class="text-xs text-gray-300">每天早上獲得 3 顆雞蛋（陷阱），丟出雞蛋，只有狼人陣營踩到會動彈不得 3 秒。</p>
           </div>
-
-          <!-- 忍者 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-user-ninja text-xs"></i> 忍者</h4>
-            <p class="text-xs text-gray-300">每天早上獲得藥水，喝下後周圍所有玩家速度加快且免疫傷害一段時間。</p>
+            <p class="text-xs text-gray-300">每天早上獲得藥水，喝下藥水，周圍所有玩家速度加快且免疫傷害一段時間。</p>
           </div>
-
-          <!-- 騎士 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-khanda text-xs"></i> 騎士</h4>
-            <p class="text-xs text-gray-300">第二天起用木劍攻擊玩家發起決鬥。對方為狼人/第三方則對方死，若對方為好人則騎士死。</p>
+            <p class="text-xs text-gray-300">第二天開始可用木劍打中玩家進行決鬥。若是狼人和第三方會死；如果是好人，騎士會死。</p>
           </div>
-
-          <!-- 聖誕老人 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-gift text-xs"></i> 聖誕老人</h4>
-            <p class="text-xs text-gray-300">每天晚上可送任意玩家禮物（10 金幣），且夜晚期間獲得隱身與速度加快。</p>
+            <p class="text-xs text-gray-300">每天晚上可以贈送任意玩家禮物（10 金幣），且晚上期間會有一段時間隱身與速度加快。</p>
           </div>
-
-          <!-- 謠言學家 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-bullhorn text-xs"></i> 謠言學家</h4>
-            <p class="text-xs text-gray-300">第二天早上開始會收到必定錯誤的訊息情報。</p>
+            <p class="text-xs text-gray-300">第二天早上開始會收到必定錯誤的訊息。</p>
           </div>
-
-          <!-- 攝夢人 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-bed text-xs"></i> 攝夢人</h4>
-            <p class="text-xs text-gray-300">每晚攝夢一位玩家，該玩家隔日無法使用技能（無法連續兩晚攝夢同一人）。</p>
+            <p class="text-xs text-gray-300">每天晚上可以選擇攝夢一位玩家，該玩家明天將無法使用任何技能，無法連續攝夢同個玩家。</p>
           </div>
-
-          <!-- 指令大神 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i> 指令大神</h4>
-            <p class="text-xs text-gray-300">每場可瞬間修復指令方塊一次；每 5 秒獲得 10 秒隨機效果（結束後冷卻）。</p>
+            <p class="text-xs text-gray-300">一場遊戲中可以瞬間修復指令方塊一次；每 5 秒獲得 10 秒的隨機效果（效果結束才進冷卻）。</p>
           </div>
-
-          <!-- 村民 -->
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition col-span-1 md:col-span-2 lg:col-span-3">
             <h4 class="text-lg font-bold text-gray-400 mb-1"><i class="fa-solid fa-person text-xs"></i> 村民</h4>
-            <p class="text-xs text-gray-400">普通的平民老百姓，沒有任何特殊功能。</p>
+            <p class="text-xs text-gray-400">沒有啥用處都沒有。</p>
           </div>
         </div>
       </section>
 
-      <!-- 3. 第三方陣營 -->
+      <!-- 第三方陣營 -->
       <section class="mc-box p-6 mb-8 glow-neutral card-3d">
         <div class="flex items-center gap-3 border-b-2 border-yellow-900/60 pb-3 mb-4">
           <span class="px-3 py-1 bg-yellow-600 text-black font-bold text-xs tracking-wider rounded-sm shadow">
             <i class="fa-solid fa-scale-balanced mr-1"></i> ⚖️ 第三方陣營
           </span>
-          <span class="text-xs text-yellow-400 font-bold">🟡 NEUTRAL FACTION</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 role-grid">
           <div class="role-card bg-gray-900/80 p-4 border border-yellow-900/50 hover:border-yellow-500 transition">
             <h4 class="text-lg font-bold text-yellow-400 mb-1"><i class="fa-solid fa-coins text-xs"></i> 淘金者</h4>
-            <p class="text-xs text-gray-300">勝利條件：收集到指定數量的金幣即可獲勝。</p>
+            <p class="text-xs text-gray-300">獲勝條件：收集指定金幣數量獲勝。</p>
           </div>
-
           <div class="role-card bg-gray-900/80 p-4 border border-yellow-900/50 hover:border-yellow-500 transition">
             <h4 class="text-lg font-bold text-yellow-400 mb-1"><i class="fa-solid fa-gem text-xs"></i> 水晶盜賊</h4>
-            <p class="text-xs text-gray-300">勝利條件：合成水晶即可直接贏得遊戲。</p>
+            <p class="text-xs text-gray-300">獲勝條件：合成水晶獲勝。</p>
           </div>
-
           <div class="role-card bg-gray-900/80 p-4 border border-yellow-900/50 hover:border-yellow-500 transition">
             <h4 class="text-lg font-bold text-yellow-400 mb-1"><i class="fa-solid fa-face-grin-tears text-xs"></i> 抖 M</h4>
-            <p class="text-xs text-gray-300">勝利條件：成功被大家投票放逐即可單獨獲勝。</p>
+            <p class="text-xs text-gray-300">獲勝條件：被放逐（投票）獲勝。</p>
           </div>
         </div>
       </section>
     </div>
 
-    <!-- 內容區塊 3: 指令說明 -->
+    <!-- 區塊 3: 指令說明 -->
     <section id="section-commands" class="mc-box p-6 mb-8 card-3d">
       <div class="flex items-center gap-3 border-b-2 border-cyan-900/60 pb-3 mb-4">
         <div class="w-10 h-10 bg-cyan-500/20 border-2 border-cyan-500 flex items-center justify-center text-cyan-400 text-lg">
@@ -412,19 +409,17 @@
         </div>
         <div>
           <h2 class="text-xl font-bold text-cyan-400">三、 指令使用說明</h2>
-          <p class="text-xs text-gray-400">遊戲內常用的控制指令一覽。</p>
+          <p class="text-xs text-gray-400">控制伺服器選單與管理員權限之指令。</p>
         </div>
       </div>
 
       <div class="space-y-4">
-        <!-- 指令 1 -->
         <div class="bg-gray-900/80 p-4 border border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
             <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs bg-green-950 text-green-400 border border-green-800 px-2 py-0.5">普通玩家</span>
-              <span class="text-sm font-bold text-gray-200">開啟維度選擇選單</span>
+              <span class="text-xs bg-green-950 text-green-400 border border-green-800 px-2 py-0.5">無需權限</span>
+              <span class="text-sm font-bold text-gray-200">打開維度選單</span>
             </div>
-            <p class="text-xs text-gray-400">輸入後即可呼叫出切換世界與維度的 UI 介面。</p>
           </div>
           <div class="flex items-center gap-2">
             <code class="bg-black text-cyan-300 font-mono text-sm px-3 py-1.5 border border-cyan-900 rounded">/twodim:menu</code>
@@ -434,14 +429,12 @@
           </div>
         </div>
 
-        <!-- 指令 2 -->
         <div class="bg-gray-900/80 p-4 border border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
             <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs bg-red-950 text-red-400 border border-red-800 px-2 py-0.5">管理員權限</span>
+              <span class="text-xs bg-red-950 text-red-400 border border-red-800 px-2 py-0.5">需要管理員權限</span>
               <span class="text-sm font-bold text-gray-200">進入角色池設定區</span>
             </div>
-            <p class="text-xs text-gray-400">賦予自己 OP 標籤並進入管理區調整角色池。</p>
           </div>
           <div class="flex items-center gap-2">
             <code class="bg-black text-cyan-300 font-mono text-sm px-3 py-1.5 border border-cyan-900 rounded">/tag @s add op</code>
@@ -453,27 +446,22 @@
       </div>
     </section>
 
-    <!-- 頁尾 -->
     <footer class="text-center text-xs text-gray-500 mt-12 py-6 border-t border-gray-800">
-      <p class="mb-2">Minecraft Server Werewolf Game Document © 2026</p>
-      <p class="text-[10px] text-gray-600">本網頁為伺服器官方玩家手冊，設計專為增強遊戲體驗而生。</p>
+      <p>Minecraft Server Werewolf Game Document © 2026</p>
     </footer>
 
   </div>
 
-  <!-- Toast 提示訊息 -->
+  <!-- Toast 訊息提示 -->
   <div id="toast" class="fixed bottom-6 right-6 bg-amber-500 text-black px-4 py-2 border-2 border-black font-bold text-xs shadow-2xl transition-all opacity-0 translate-y-10 pointer-events-none flex items-center gap-2">
     <i class="fa-solid fa-check-circle"></i> <span id="toast-msg">已複製指令！</span>
   </div>
 
 <script>
-  // ================= Web Audio API 像素音效生成器 =================
+  // 8-bit Web Audio API 像素音效生成器
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  
   function playSound(type) {
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
@@ -497,12 +485,11 @@
     }
   }
 
-  // 為所有可互動元素綁定音效
   document.querySelectorAll('button, input, .role-card').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
   });
 
-  // ================= 背景動態 Canvas 粒子 (飄落方塊與閃爍星空) =================
+  // Canvas 背景粒子繪製
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
 
@@ -514,9 +501,7 @@
   window.addEventListener('resize', resizeCanvas);
 
   const particles = [];
-  const numParticles = 40;
-
-  for (let i = 0; i < numParticles; i++) {
+  for (let i = 0; i < 40; i++) {
     particles.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
@@ -530,37 +515,32 @@
 
   function animateCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     particles.forEach(p => {
       p.y -= p.speedY;
       p.x += p.speedX;
-
       if (p.y < -10) {
         p.y = canvas.height + 10;
         p.x = Math.random() * canvas.width;
       }
-
       ctx.fillStyle = p.color;
       ctx.globalAlpha = p.opacity;
-      // 繪製像素方形粒子
       ctx.fillRect(p.x, p.y, p.size, p.size);
     });
-
     requestAnimationFrame(animateCanvas);
   }
   animateCanvas();
 
-  // ================= 分頁切換邏輯 =================
+  // 分頁切換功能
   function switchTab(tabName) {
     playSound('click');
     const sections = {
+      'connection': document.getElementById('section-connection'),
       'rules': document.getElementById('section-rules'),
       'roles': document.getElementById('section-roles'),
       'commands': document.getElementById('section-commands')
     };
 
-    const tabs = ['all', 'rules', 'roles', 'commands'];
-    tabs.forEach(t => {
+    ['all', 'connection', 'rules', 'roles', 'commands'].forEach(t => {
       const btn = document.getElementById(`tab-${t}`);
       if (btn) btn.classList.remove('active');
     });
@@ -575,39 +555,32 @@
     }
   }
 
-  // ================= 角色與能力搜尋過濾 =================
+  // 角色能力即時搜尋
   function filterRoles() {
     const query = document.getElementById('roleSearch').value.toLowerCase();
-    const cards = document.querySelectorAll('.role-card');
-
-    cards.forEach(card => {
-      const text = card.textContent.toLowerCase();
-      if (text.includes(query)) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
+    document.querySelectorAll('.role-card').forEach(card => {
+      card.style.display = card.textContent.toLowerCase().includes(query) ? 'block' : 'none';
     });
   }
 
-  // ================= 複製指令與 Toast 提示 =================
+  // 複製剪貼簿（相容安全性限制與舊版瀏覽器）
   function copyCmd(text) {
     playSound('click');
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-
-    showToast(`已複製指令: ${text}`);
-  }
-
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toast-msg').innerText = msg;
-    toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
     
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text);
+    } else {
+      const dummy = document.createElement('textarea');
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+    }
+
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').innerText = `已複製：${text}`;
+    toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
     setTimeout(() => {
       toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
     }, 2500);
