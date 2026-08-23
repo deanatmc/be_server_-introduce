@@ -1,29 +1,311 @@
-<!doctype html>
-<html lang="zh-Hant">
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>日本旅遊記帳 App</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<title>伺服器介紹文件</title>
+<style>
+  body {
+    font-family: "Microsoft JhengHei", "Noto Sans CJK TC", sans-serif;
+    color: #1e293b;
+    background-color: #f8fafc;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.5;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .header {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 20px 25px;
+    margin: -30px -30px 25px -30px;
+    border-radius: 8px 8px 0 0;
+    border-bottom: 4px solid #38bdf8;
+  }
+
+  .header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .header .meta {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 5px;
+  }
+
+  h2 {
+    font-size: 18px;
+    color: #0f172a;
+    border-left: 4px solid #0284c7;
+    padding-left: 10px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+
+  h3 {
+    font-size: 15px;
+    color: #0369a1;
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+
+  .section-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+  }
+
+  .rules-list {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .rules-list li {
+    margin-bottom: 8px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: #f1f5f9;
+    color: #334155;
+    font-weight: 600;
+  }
+
+  .badge-werewolf {
+    background-color: #fef2f2;
+    color: #991b1b;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  .badge-good {
+    background-color: #f0fdf4;
+    color: #166534;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  .badge-neutral {
+    background-color: #fefce8;
+    color: #854d0e;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  code {
+    font-family: Consolas, Monaco, monospace;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .win-cond {
+    font-weight: bold;
+    color: #475569;
+    margin-bottom: 12px;
+    background: #f8fafc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border-left: 3px solid #cbd5e1;
+  }
+</style>
 </head>
 <body>
-<header><h1>🇯🇵 日本旅遊記帳 App</h1><p>Supabase 雲端同步版</p></header>
-<main>
-<section class="panel"><h2>Supabase 設定</h2><div class="form-grid">
-<label>Project URL<input id="supabaseUrl" placeholder="https://xxxx.supabase.co"></label>
-<label>Anon / Publishable key<input id="supabaseKey" placeholder="sb_publishable_... 或 anon key"></label>
-</div><button id="saveConfig">儲存設定</button><p class="hint">設定只保存在這支手機。不要使用 service_role key。</p></section>
-<section class="stats" id="stats"></section>
-<section class="panel"><h2>＋新增一筆消費</h2><form id="expenseForm"><div class="form-grid">
-<label>日期<input name="date" type="date" required></label><label>Day<input name="day" placeholder="Day 5" required></label>
-<label>店家<input name="store" required></label><label>類別<input name="category" required></label>
-<label>商品名稱<input name="name" required></label><label>數量<input name="qty"></label>
-<label>日幣<input name="jpy" type="number" required></label><label>付款方式<input name="payment"></label>
-</div><label>備註<textarea name="note"></textarea></label><button type="submit">寫入 Supabase</button></form></section>
-<section class="panel"><h2>一張收據多商品快速新增</h2><p class="hint">格式：商品名稱｜數量｜日幣，每行一個商品。</p><form id="bulkForm"><div class="form-grid">
-<label>日期<input name="date" type="date" required></label><label>Day<input name="day" placeholder="Day 5" required></label>
-<label>店家<input name="store" required></label><label>類別<input name="category" required></label>
-<label>付款方式<input name="payment"></label><label>備註<input name="note"></label>
-</div><textarea name="items" rows="8" placeholder="西瓜｜2｜796&#10;玉子燒｜1｜158&#10;有機豆奶｜1｜228" required></textarea><button type="submit">批次寫入 Supabase</button></form></section>
-<input id="search" placeholder="搜尋商品或店家"><div id="status" class="status"></div><section id="expenseList"></section>
-</main><script src="app.js"></script></body></html>
+
+<div class="container">
+  <div class="header">
+    <h1>伺服器介紹文件</h1>
+    <div class="meta">最後更新時間：2026/08/23 07:00</div>
+  </div>
+
+  <div class="section-card">
+    <h2>一、 伺服器規章</h2>
+    <ol class="rules-list">
+      <li>不得隨意破壞地圖。</li>
+      <li>不得隨意使用指令及指令方塊。</li>
+      <li>不得故意讓伺服器崩潰。</li>
+      <li>有問題請向管理人員詢問。</li>
+      <li>此文件所有者有最終解釋權。</li>
+      <li>加入伺服器皆自動視為同意所有條款及規定。</li>
+    </ol>
+  </div>
+
+  <h2>二、 狼人殺角色及遊戲玩法</h2>
+
+  <div class="section-card">
+    <h3><span class="badge-werewolf">狼人陣營</span></h3>
+    <div class="win-cond">勝利條件：場上僅存狼人陣營的人。</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">角色名稱</th>
+          <th>能力介紹與規則</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>狼人</b></td>
+          <td>每晚獲得雪球，殺害好人；可以使用牛生怪蛋來破壞指令方塊。</td>
+        </tr>
+        <tr>
+          <td><b>炸彈狼</b></td>
+          <td>第二天晚上開始會拿到「選擇植入炸彈者」，選擇完後隔天早上被植入者死亡。</td>
+        </tr>
+        <tr>
+          <td><b>血狼</b></td>
+          <td>第一天無法殺人；第二天開始可以使用技能「血月」（立即變為晚上 60 秒，所有狼人玩家獲得加速 V 與力量 III，其他玩家獲得黑暗 I，血月結束後血狼死亡）。</td>
+        </tr>
+        <tr>
+          <td><b>毒狼</b></td>
+          <td>第二天晚上開始可以對一個人下毒，被下毒的玩家會在隔天早上死亡。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="badge-good">好人陣營</span></h3>
+    <div class="win-cond">勝利條件：消滅狼人 / 存活 5 天 / 獲得水晶</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">角色名稱</th>
+          <th>能力介紹與規則</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>女巫</b></td>
+          <td>每天早上獲得毒藥和解藥，消滅狼人。</td>
+        </tr>
+        <tr>
+          <td><b>鷹眼</b></td>
+          <td>每天早上擁有 30 秒的時間，觀看隨機玩家的動向。</td>
+        </tr>
+        <tr>
+          <td><b>獵人</b></td>
+          <td>每天早上獲得 3 顆雞蛋（陷阱），丟出雞蛋，只有狼人陣營踩到會動彈不得 3 秒。</td>
+        </tr>
+        <tr>
+          <td><b>忍者</b></td>
+          <td>每天早上獲得藥水，喝下藥水，周圍所有玩家速度加快且免疫傷害一段時間。</td>
+        </tr>
+        <tr>
+          <td><b>騎士</b></td>
+          <td>第二天開始可以決鬥，用木劍打中玩家可以進行決鬥。如果是狼人和第三方會死；如果是好人，騎士會死。</td>
+        </tr>
+        <tr>
+          <td><b>聖誕老人</b></td>
+          <td>每天晚上可以贈送任意玩家禮物（10 金幣），且晚上期間會有一段時間隱身與速度加快。</td>
+        </tr>
+        <tr>
+          <td><b>謠言學家</b></td>
+          <td>第二天早上開始會收到必定錯誤的訊息。</td>
+        </tr>
+        <tr>
+          <td><b>攝夢人</b></td>
+          <td>每天晚上可以選擇攝夢一位玩家，該玩家明天將無法使用任何技能，無法連續攝夢同個玩家。</td>
+        </tr>
+        <tr>
+          <td><b>指令大神</b></td>
+          <td>一場遊戲中可以瞬間修復指令方塊一次；每 5 秒獲得 10 秒的隨機效果（效果結束才進冷卻）。</td>
+        </tr>
+        <tr>
+          <td><b>村民</b></td>
+          <td>沒有任何特殊功能。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="badge-neutral">第三方陣營</span></h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">角色名稱</th>
+          <th>勝利條件</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>淘金者</b></td>
+          <td>收集指定金幣數量獲勝。</td>
+        </tr>
+        <tr>
+          <td><b>水晶盜賊</b></td>
+          <td>合成水晶獲勝。</td>
+        </tr>
+        <tr>
+          <td><b>抖 M</b></td>
+          <td>被投票放逐獲勝。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-card">
+    <h2>三、 指令使用說明</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">權限需求</th>
+          <th style="width: 35%;">功能描述</th>
+          <th>指令內容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>一般玩家（無需權限）</td>
+          <td>打開維度選單</td>
+          <td><code>/twodim:menu</code></td>
+        </tr>
+        <tr>
+          <td>管理員（需要權限）</td>
+          <td>進入角色池設定區</td>
+          <td><code>/tag @s add op</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
