@@ -15,11 +15,10 @@
     src: url('https://cdn.jsdelivr.net/gh/SouthSky/Minecraft-Font/Minecraft.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-    font-display: swap; /* 免等待：字型下載完前先顯示替代系統字體，下載完自動無縫替換 */
+    font-display: swap;
   }
 
   * {
-    /* 使用線上記錄字型，若載入失敗則自動退回系統預設無襯線字體 */
     font-family: 'MinecraftCustom', "Microsoft JhengHei", "PingFang TC", sans-serif;
     user-select: none;
   }
@@ -114,6 +113,8 @@
   .glow-good { box-shadow: 0 0 20px rgba(34, 197, 94, 0.35); border-color: #22c55e !important; }
   .glow-neutral { box-shadow: 0 0 20px rgba(234, 179, 8, 0.35); border-color: #eab308 !important; }
   .glow-server { box-shadow: 0 0 20px rgba(56, 189, 248, 0.35); border-color: #38bdf8 !important; }
+  .glow-purple { box-shadow: 0 0 20px rgba(168, 85, 247, 0.35); border-color: #a855f7 !important; }
+  .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.35); border-color: #10b981 !important; }
 
   /* Canvas 背景粒子 */
   #bg-canvas {
@@ -134,8 +135,17 @@
 
   <div class="max-w-6xl mx-auto px-4 pt-8">
 
-    <!-- 頁頭標題卡片 -->
-    <header class="mc-box p-6 md:p-8 text-center relative overflow-hidden mb-8 rainbow-border">
+    <!-- 頁頭標題卡片與主視覺照片 -->
+    <header class="mc-box p-4 md:p-6 text-center relative overflow-hidden mb-8 rainbow-border">
+      <!-- Minecraft 狼人殺主視覺橫幅海報照片 -->
+      <div class="relative w-full overflow-hidden border-4 border-black mb-6 shadow-2xl rounded-sm">
+        <img src="image.png" alt="Minecraft 狼人殺封面海報" class="w-full h-auto object-cover max-h-[450px] transform hover:scale-105 transition-transform duration-500">
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-4 text-left">
+          <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm tracking-widest uppercase">Official Banner</span>
+          <p class="text-xs text-gray-300 mt-1">進入經典黑夜下的 Minecraft 狼人殺戰局</p>
+        </div>
+      </div>
+
       <div class="inline-block bg-amber-500 text-black px-3 py-1 text-xs font-bold rounded-sm mb-3 tracking-widest mc-blink">
         <i class="fa-solid fa-crown mr-1"></i> MINECRAFT SERVER GUIDE
       </div>
@@ -145,7 +155,7 @@
       </h1>
 
       <p class="text-xs md:text-sm text-gray-300 max-w-2xl mx-auto mt-2 leading-relaxed">
-        歡迎來到 Minecraft 狼人殺伺服器！請詳細閱讀以下連線資訊、規則與角色技能說明。
+        歡迎來到 Minecraft 狼人殺伺服器！請詳細閱讀以下連線資訊、檔案下載、規則與角色技能說明。
       </p>
 
       <div class="mt-4 inline-flex items-center gap-2 bg-black/50 border border-gray-700 px-4 py-1.5 rounded-full text-xs text-gray-400">
@@ -153,6 +163,35 @@
         <span>最後更新時間：<span class="text-amber-300 font-mono">2026/08/23 07:00</span></span>
       </div>
     </header>
+
+    <!-- 檔案下載專區 -->
+    <section id="section-download" class="mc-box p-6 mb-8 glow-emerald card-3d">
+      <div class="flex items-center gap-3 border-b-2 border-emerald-900/60 pb-3 mb-4">
+        <div class="w-10 h-10 bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-emerald-400 text-lg">
+          <i class="fa-solid fa-folder-arrow-down"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-emerald-400">📂 檔案下載專區</h2>
+          <p class="text-xs text-gray-400">下載遊戲所需的材質包、地圖檔或相關資源包。</p>
+        </div>
+      </div>
+
+      <div class="bg-gray-900/80 p-5 border border-emerald-900/50 rounded flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-emerald-950 border-2 border-emerald-500 flex items-center justify-center text-emerald-400 text-2xl shrink-0">
+            <i class="fa-solid fa-box-archive"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-gray-100 mb-1">伺服器資源整合包 / 下載專區</h3>
+            <p class="text-xs text-gray-400">包含遊戲地圖、專屬材質與必要之補充元件。</p>
+          </div>
+        </div>
+        <a href="https://pse.is/9hxw5z" target="_blank" rel="noopener noreferrer" 
+           class="mc-btn px-6 py-2.5 text-xs text-emerald-300 font-bold inline-flex items-center gap-2 hover:scale-105 transition-transform shrink-0">
+          <i class="fa-solid fa-download"></i> 前往檔案下載專區
+        </a>
+      </div>
+    </section>
 
     <!-- 伺服器連線資訊區塊 -->
     <section id="section-connection" class="mc-box p-6 mb-8 glow-server card-3d">
@@ -214,20 +253,29 @@
     <!-- 導覽頁籤與角色搜尋器 -->
     <div class="mc-box p-4 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
       <div class="flex flex-wrap gap-2 w-full md:w-auto justify-center">
-        <button onclick="switchTab('all')" id="tab-all" class="mc-btn active px-4 py-2 text-sm text-amber-300 font-bold flex items-center gap-2">
+        <button onclick="switchTab('all')" id="tab-all" class="mc-btn active px-3 py-1.5 text-xs md:text-sm text-amber-300 font-bold flex items-center gap-1.5">
           <i class="fa-solid fa-grip"></i> 全部內容
         </button>
-        <button onclick="switchTab('connection')" id="tab-connection" class="mc-btn px-4 py-2 text-sm text-gray-300 font-bold flex items-center gap-2">
+        <button onclick="switchTab('download')" id="tab-download" class="mc-btn px-3 py-1.5 text-xs md:text-sm text-gray-300 font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-file-arrow-down text-emerald-400"></i> 檔案下載
+        </button>
+        <button onclick="switchTab('flow')" id="tab-flow" class="mc-btn px-3 py-1.5 text-xs md:text-sm text-gray-300 font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-hourglass-half text-purple-400"></i> 遊戲流程
+        </button>
+        <button onclick="switchTab('connection')" id="tab-connection" class="mc-btn px-3 py-1.5 text-xs md:text-sm text-gray-300 font-bold flex items-center gap-1.5">
           <i class="fa-solid fa-wifi text-sky-400"></i> 連線方式
         </button>
-        <button onclick="switchTab('rules')" id="tab-rules" class="mc-btn px-4 py-2 text-sm text-gray-300 font-bold flex items-center gap-2">
+        <button onclick="switchTab('rules')" id="tab-rules" class="mc-btn px-3 py-1.5 text-xs md:text-sm text-gray-300 font-bold flex items-center gap-1.5">
           <i class="fa-solid fa-scroll text-yellow-500"></i> 伺服器規章
         </button>
-        <button onclick="switchTab('roles')" id="tab-roles" class="mc-btn px-4 py-2 text-sm text-gray-300 font-bold flex items-center gap-2">
+        <button onclick="switchTab('roles')" id="tab-roles" class="mc-btn px-3 py-1.5 text-xs md:text-sm text-gray-300 font-bold flex items-center gap-1.5">
           <i class="fa-solid fa-mask text-red-500"></i> 狼人殺角色
         </button>
-        <button onclick="switchTab('commands')" id="tab-commands" class="mc-btn px-4 py-2 text-sm text-gray-300 font-bold flex items-center gap-2">
+        <button onclick="switchTab('commands')" id="tab-commands" class="mc-btn px-3 py-1.5 text-xs md:text-sm text-gray-300 font-bold flex items-center gap-1.5">
           <i class="fa-solid fa-terminal text-cyan-400"></i> 指令說明
+        </button>
+        <button onclick="switchTab('bug')" id="tab-bug" class="mc-btn px-3 py-1.5 text-xs md:text-sm text-gray-300 font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-bug text-red-400"></i> 回報 Bug
         </button>
       </div>
 
@@ -239,19 +287,118 @@
       </div>
     </div>
 
-    <!-- 區塊 1: 伺服器規章 -->
+    <!-- 區塊: 遊戲基礎流程與時間機制 -->
+    <section id="section-flow" class="mc-box p-6 mb-8 glow-purple card-3d">
+      <div class="flex items-center gap-3 border-b-2 border-purple-900/60 pb-3 mb-6">
+        <div class="w-10 h-10 bg-purple-500/20 border-2 border-purple-500 flex items-center justify-center text-purple-400 text-lg">
+          <i class="fa-solid fa-diagram-project"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-purple-400">🎮 遊戲基礎流程與時間機制</h2>
+          <p class="text-xs text-gray-400">包含晝夜交替流程圖與各階段說明卡片。</p>
+        </div>
+      </div>
+
+      <!-- 1. 晝夜交替流程圖 -->
+      <div class="mb-8">
+        <h3 class="text-sm font-bold text-amber-400 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-arrows-spin text-amber-400"></i> 晝夜交替時間表 (Flowchart)
+        </h3>
+        
+        <!-- 橫向流程圖鏈 -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-center relative">
+          <!-- Step 1 -->
+          <div class="bg-gray-900/90 p-4 border-2 border-amber-500/80 rounded relative group hover:scale-[1.02] transition">
+            <div class="text-amber-400 text-2xl mb-1"><i class="fa-solid fa-sun"></i></div>
+            <div class="text-xs font-bold text-amber-300">1. 白天時間</div>
+            <div class="text-[11px] text-gray-400 mt-1">發放每日道具、公佈死者與隨機效果</div>
+            <div class="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 text-amber-400 text-lg z-10">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="bg-gray-900/90 p-4 border-2 border-indigo-500/80 rounded relative group hover:scale-[1.02] transition">
+            <div class="text-indigo-400 text-2xl mb-1"><i class="fa-solid fa-moon"></i></div>
+            <div class="text-xs font-bold text-indigo-300">2. 夜晚時間</div>
+            <div class="text-[11px] text-gray-400 mt-1">狼人殺人、神職技能發動、攝夢/傳教</div>
+            <div class="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 text-indigo-400 text-lg z-10">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-gray-900/90 p-4 border-2 border-yellow-500/80 rounded relative group hover:scale-[1.02] transition">
+            <div class="text-yellow-400 text-2xl mb-1"><i class="fa-solid fa-comments"></i></div>
+            <div class="text-xs font-bold text-yellow-300">3. 辯論時間</div>
+            <div class="text-[11px] text-gray-400 mt-1">全體發言討論、進行投票表決放逐</div>
+            <div class="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 text-yellow-400 text-lg z-10">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="bg-gray-900/90 p-4 border-2 border-amber-500/80 rounded relative group hover:scale-[1.02] transition">
+            <div class="text-amber-400 text-2xl mb-1"><i class="fa-solid fa-rotate-right"></i></div>
+            <div class="text-xs font-bold text-amber-300">4. 白天時間</div>
+            <div class="text-[11px] text-gray-400 mt-1">進入下一輪天數循環，直到勝負判定</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 階段說明卡片 & 5天獲勝機制 -->
+      <div>
+        <h3 class="text-sm font-bold text-amber-400 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-amber-400"></i> 階段說明卡片與特殊勝負規則
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 階段細節說明 -->
+          <div class="bg-gray-900/80 p-4 border border-gray-800 rounded space-y-2 text-xs">
+            <div class="flex items-center gap-2 text-amber-300 font-bold border-b border-gray-800 pb-1">
+              <i class="fa-solid fa-clock"></i> 階段循環邏輯：
+            </div>
+            <p class="text-gray-300 leading-relaxed">
+              每一輪遊戲會依照 <span class="text-amber-400">「白天時間 ➔ 夜晚時間 ➔ 辯論時間 ➔ 白天時間」</span> 的固定順序交替運作。
+            </p>
+            <ul class="list-disc pl-4 text-gray-400 space-y-1">
+              <li><b class="text-gray-200">白天時間：</b>獲得天數技能道具（如雞蛋、藥水、解藥等）。</li>
+              <li><b class="text-gray-200">夜晚時間：</b>夜間技能生效（狼人雪球/植入炸彈/下毒/血月、攝夢、傳教）。</li>
+              <li><b class="text-gray-200">辯論時間：</b>進行公開對質與投票，票數最高者將被放逐。</li>
+            </ul>
+          </div>
+
+          <!-- 5天好人獲勝機制卡片 -->
+          <div class="bg-green-950/40 border-2 border-green-700/80 p-4 rounded text-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 text-green-400 font-bold text-sm mb-2">
+                <i class="fa-solid fa-shield-cat"></i> 🏆 好人陣營：存活 5 天獲勝條件
+              </div>
+              <p class="text-gray-300 leading-relaxed mb-3">
+                若遊戲房間設置有開啟 <span class="text-green-300 font-bold">「存活 5 天」</span> 的獲勝條件：只要好人陣營成功抵禦狼人攻擊並存活到達 <span class="text-amber-300 font-bold">第 5 天白天</span>，無論場上還殘存多少狼人，好人陣營將直接獲得整場遊戲的勝利！
+              </p>
+            </div>
+            <div class="bg-black/60 p-2 rounded border border-green-900 text-[11px] text-green-300 flex items-center gap-2">
+              <i class="fa-solid fa-circle-info"></i> 提示：好人只需堅持防守到第 5 天即可取勝！
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 區塊 1: 伺服器規章與懲罰規章 -->
     <section id="section-rules" class="mc-box p-6 mb-8 card-3d">
       <div class="flex items-center gap-3 border-b-2 border-gray-700 pb-3 mb-4">
         <div class="w-10 h-10 bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center text-amber-400 text-lg">
           <i class="fa-solid fa-shield-halved"></i>
         </div>
         <div>
-          <h2 class="text-xl font-bold text-amber-400">一、 伺服器規章</h2>
+          <h2 class="text-xl font-bold text-amber-400">一、 伺服器規章與懲罰</h2>
           <p class="text-xs text-gray-400">請共同維護公平良好的遊戲環境。</p>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-6">
         <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded">
           <span class="w-6 h-6 bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0 rounded-sm">1</span>
           <p class="text-gray-200 leading-relaxed">不得隨意破壞地圖與建築設施。</p>
@@ -275,6 +422,16 @@
         <div class="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded">
           <span class="w-6 h-6 bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0 rounded-sm">6</span>
           <p class="text-gray-200 leading-relaxed">加入伺服器皆自動視為同意所有條款及規定。</p>
+        </div>
+      </div>
+
+      <!-- 違規處罰梯度卡片 -->
+      <div class="bg-red-950/40 border border-red-900 p-4 rounded text-xs">
+        <h4 class="text-red-400 font-bold mb-2 flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> 違規處罰機制：</h4>
+        <div class="flex flex-col sm:flex-row gap-3 text-gray-300">
+          <span class="bg-black/50 px-2 py-1 rounded border border-red-900">初犯：線上警告 1 次</span>
+          <span class="bg-black/50 px-2 py-1 rounded border border-red-900">再犯：禁止發言或踢出伺服器 (Kick)</span>
+          <span class="bg-black/50 px-2 py-1 rounded border border-red-900">嚴重違規：永久封鎖帳號 (Ban)</span>
         </div>
       </div>
     </section>
@@ -384,7 +541,7 @@
           </span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 role-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 role-grid">
           <div class="role-card bg-gray-900/80 p-4 border border-yellow-900/50 hover:border-yellow-500 transition">
             <h4 class="text-lg font-bold text-yellow-400 mb-1"><i class="fa-solid fa-coins text-xs"></i> 淘金者</h4>
             <p class="text-xs text-gray-300">獲勝條件：收集指定金幣數量獲勝。</p>
@@ -396,6 +553,10 @@
           <div class="role-card bg-gray-900/80 p-4 border border-yellow-900/50 hover:border-yellow-500 transition">
             <h4 class="text-lg font-bold text-yellow-400 mb-1"><i class="fa-solid fa-face-grin-tears text-xs"></i> 抖 M</h4>
             <p class="text-xs text-gray-300">獲勝條件：被放逐（投票）獲勝。</p>
+          </div>
+          <div class="role-card bg-gray-900/80 p-4 border border-yellow-900/50 hover:border-yellow-500 transition">
+            <h4 class="text-lg font-bold text-yellow-400 mb-1"><i class="fa-solid fa-book-bible text-xs"></i> 傳教士</h4>
+            <p class="text-xs text-gray-300">每晚會獲得一個叫「傳教」的物品並點擊右鍵對玩家使用。只要場上所有存活玩家都被成功傳教後即可直接獲勝。</p>
           </div>
         </div>
       </section>
@@ -446,6 +607,21 @@
       </div>
     </section>
 
+    <!-- 區塊 4: Bug 問題回報表單連結區塊 -->
+    <section id="section-bug" class="mc-box p-6 text-center rainbow-border">
+      <h3 class="text-xl font-bold text-red-400 mb-2 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-bug"></i> 伺服器問題 / Bug 回報表單
+      </h3>
+      <p class="text-xs text-gray-300 mb-5 max-w-xl mx-auto leading-relaxed">
+        如果在遊戲中遇到地圖壞掉、指令異常或玩家違規等情況，請點擊下方按鈕前往 Google 表單進行填寫回報，管理員將會儘速處理！
+      </p>
+      
+      <a href="https://forms.gle/8UC6b5q5ThGa1dPq9" target="_blank" rel="noopener noreferrer" 
+         class="mc-btn px-8 py-3 text-sm text-amber-300 font-bold inline-flex items-center gap-2 hover:scale-105 transition-transform">
+        <i class="fa-solid fa-pen-to-square"></i> 開啟 Bug 問題回報表單
+      </a>
+    </section>
+
     <footer class="text-center text-xs text-gray-500 mt-12 py-6 border-t border-gray-800">
       <p>Minecraft Server Werewolf Game Document © 2026</p>
     </footer>
@@ -453,8 +629,8 @@
   </div>
 
   <!-- Toast 訊息提示 -->
-  <div id="toast" class="fixed bottom-6 right-6 bg-amber-500 text-black px-4 py-2 border-2 border-black font-bold text-xs shadow-2xl transition-all opacity-0 translate-y-10 pointer-events-none flex items-center gap-2">
-    <i class="fa-solid fa-check-circle"></i> <span id="toast-msg">已複製指令！</span>
+  <div id="toast" class="fixed bottom-6 right-6 bg-amber-500 text-black px-4 py-2 border-2 border-black font-bold text-xs shadow-2xl transition-all opacity-0 translate-y-10 pointer-events-none flex items-center gap-2 z-50">
+    <i class="fa-solid fa-check-circle"></i> <span id="toast-msg">已複製！</span>
   </div>
 
 <script>
@@ -485,7 +661,7 @@
     }
   }
 
-  document.querySelectorAll('button, input, .role-card').forEach(el => {
+  document.querySelectorAll('button, a, input, .role-card').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
   });
 
@@ -534,13 +710,16 @@
   function switchTab(tabName) {
     playSound('click');
     const sections = {
+      'download': document.getElementById('section-download'),
+      'flow': document.getElementById('section-flow'),
       'connection': document.getElementById('section-connection'),
       'rules': document.getElementById('section-rules'),
       'roles': document.getElementById('section-roles'),
-      'commands': document.getElementById('section-commands')
+      'commands': document.getElementById('section-commands'),
+      'bug': document.getElementById('section-bug')
     };
 
-    ['all', 'connection', 'rules', 'roles', 'commands'].forEach(t => {
+    ['all', 'download', 'flow', 'connection', 'rules', 'roles', 'commands', 'bug'].forEach(t => {
       const btn = document.getElementById(`tab-${t}`);
       if (btn) btn.classList.remove('active');
     });
@@ -578,8 +757,12 @@
       document.body.removeChild(dummy);
     }
 
+    showToast(`已複製：${text}`);
+  }
+
+  function showToast(msg) {
     const toast = document.getElementById('toast');
-    document.getElementById('toast-msg').innerText = `已複製：${text}`;
+    document.getElementById('toast-msg').innerText = msg;
     toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
     setTimeout(() => {
       toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
