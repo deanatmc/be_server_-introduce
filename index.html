@@ -1,191 +1,155 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minecraft 伺服器狼人殺介紹網頁</title>
-<!-- Tailwind CSS Utility Styling -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- FontAwesome 圖示庫 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-  /* 免下載字型！直接從線上 CDN 載入 Minecraft 經典像素字型 */
-  @font-face {
-    font-family: 'MinecraftCustom';
-    src: url('https://cdn.jsdelivr.net/gh/SouthSky/Minecraft-Font/Minecraft.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft 伺服器狼人殺介紹與指南</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    @font-face {
+      font-family: 'MinecraftCustom';
+      src: local('Microsoft JhengHei');
+    }
+    
+    * {
+      font-family: 'MinecraftCustom', "Microsoft JhengHei", "PingFang TC", sans-serif;
+      user-select: none;
+    }
 
-  * {
-    font-family: 'MinecraftCustom', "Microsoft JhengHei", "PingFang TC", sans-serif;
-    user-select: none;
-    image-rendering: pixelated; /* 強制像素圖片點陣化不失真 */
-  }
+    /* 自訂像素風格滾動條 */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0d1117;
+      border-left: 2px solid #1f2937;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #374151;
+      border: 3px solid #0d1117;
+      box-shadow: inset 1px 1px 0 #6b7280;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f59e0b;
+      box-shadow: inset 1px 1px 0 #fbbf24;
+    }
 
-  /* 自訂像素風格滾動條 */
-  ::-webkit-scrollbar {
-    width: 12px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0d1117;
-    border-left: 2px solid #1f2937;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #374151;
-    border: 3px solid #0d1117;
-    box-shadow: inset 1px 1px 0 #6b7280;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #f59e0b;
-    box-shadow: inset 1px 1px 0 #fbbf24;
-  }
+    /* 動態霓虹紅石閃爍效果 */
+    .mc-blink {
+      animation: mcBlink 1.2s infinite alternate;
+    }
+    @keyframes mcBlink {
+      0% { opacity: 1; filter: drop-shadow(0 0 8px #ef4444); }
+      100% { opacity: 0.4; filter: drop-shadow(0 0 2px #991b1b); }
+    }
 
-  /* 動態霓虹紅石閃爍效果 */
-  .mc-blink {
-    animation: mcBlink 1.2s infinite alternate;
-  }
-  @keyframes mcBlink {
-    0% { opacity: 1; filter: drop-shadow(0 0 8px #ef4444); }
-    100% { opacity: 0.4; filter: drop-shadow(0 0 2px #991b1b); }
-  }
+    /* Minecraft 經典立體 3D 外框面板 */
+    .mc-box {
+      background-color: rgba(24, 30, 42, 0.9);
+      border: 4px solid #000;
+      box-shadow: inset -4px -4px 0px #0d1117, inset 4px 4px 0px #4b5563, 0 10px 25px rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+    }
 
-  /* Minecraft 經典立體 3D 外框面板 */
-  .mc-box {
-    background-color: rgba(24, 30, 42, 0.9);
-    border: 4px solid #000;
-    box-shadow: inset -4px -4px 0px #0d1117, inset 4px 4px 0px #4b5563, 0 10px 25px rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
-  }
+    /* 像素風按鈕樣式 */
+    .mc-btn {
+      background-color: #374151;
+      border: 3px solid #000;
+      box-shadow: inset -3px -3px 0px #111827, inset 3px 3px 0px #6b7280;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .mc-btn:hover {
+      background-color: #4b5563;
+      transform: translateY(-2px);
+      box-shadow: inset -3px -3px 0px #111827, inset 3px 3px 0px #9ca3af, 0 0 15px rgba(245, 158, 11, 0.6);
+    }
+    .mc-btn:active, .mc-btn.active {
+      background-color: #f59e0b;
+      color: #000;
+      box-shadow: inset 3px 3px 0px #78350f, inset -3px -3px 0px #fef08a;
+    }
 
-  /* 像素風按鈕樣式 */
-  .mc-btn {
-    background-color: #374151;
-    border: 3px solid #000;
-    box-shadow: inset -3px -3px 0px #111827, inset 3px 3px 0px #6b7280;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .mc-btn:hover {
-    background-color: #4b5563;
-    transform: translateY(-2px);
-    box-shadow: inset -3px -3px 0px #111827, inset 3px 3px 0px #9ca3af, 0 0 15px rgba(245, 158, 11, 0.6);
-  }
-  .mc-btn:active, .mc-btn.active {
-    background-color: #f59e0b;
-    color: #000;
-    box-shadow: inset 3px 3px 0px #78350f, inset -3px -3px 0px #fef08a;
-  }
+    /* 卡片 3D 懸浮與像素傾斜動畫 */
+    .card-3d {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transform-style: preserve-3d;
+    }
+    .card-3d:hover {
+      transform: translateY(-4px) rotateX(2deg);
+      box-shadow: inset -4px -4px 0px #0d1117, inset 4px 4px 0px #f59e0b, 0 15px 30px rgba(0,0,0,0.9);
+    }
 
-  /* 彩蛋專用播放按鈕特效 */
-  .egg-btn {
-    background-color: #be185d;
-    border: 3px solid #000;
-    box-shadow: inset -3px -3px 0px #831843, inset 3px 3px 0px #f472b6;
-    animation: eggGlow 2s infinite alternate;
-  }
-  .egg-btn:hover {
-    background-color: #db2777;
-    transform: scale(1.05);
-    box-shadow: inset -3px -3px 0px #831843, inset 3px 3px 0px #fbcfe8, 0 0 15px #ec4899;
-  }
-  .egg-btn.playing {
-    background-color: #10b981;
-    box-shadow: inset -3px -3px 0px #065f46, inset 3px 3px 0px #6ee7b7, 0 0 15px #10b981;
-    animation: playingPulse 0.5s infinite alternate;
-  }
+    /* 彩虹發光動態外框 */
+    .rainbow-border {
+      position: relative;
+    }
+    .rainbow-border::before {
+      content: '';
+      position: absolute;
+      top: -4px; left: -4px; right: -4px; bottom: -4px;
+      background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff2b, #00f0ff, #0026ff, #7a00ff, #ff00c8, #ff0000);
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(6px);
+      animation: steam 20s linear infinite;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .rainbow-border:hover::before {
+      opacity: 1;
+    }
+    @keyframes steam {
+      0% { background-position: 0 0; }
+      50% { background-position: 400% 0; }
+      100% { background-position: 0 0; }
+    }
 
-  @keyframes eggGlow {
-    0% { box-shadow: inset -3px -3px 0px #831843, inset 3px 3px 0px #f472b6, 0 0 5px #ec4899; }
-    100% { box-shadow: inset -3px -3px 0px #831843, inset 3px 3px 0px #f472b6, 0 0 18px #f43f5e; }
-  }
+    /* 各陣營專屬氛圍燈光 */
+    .glow-werewolf { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); border-color: #ef4444 !important; }
+    .glow-good { box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); border-color: #22c55e !important; }
+    .glow-neutral { box-shadow: 0 0 20px rgba(234, 179, 8, 0.4); border-color: #eab308 !important; }
+    .glow-server { box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); border-color: #38bdf8 !important; }
+    .glow-purple { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); border-color: #a855f7 !important; }
+    .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); border-color: #10b981 !important; }
 
-  @keyframes playingPulse {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.08); }
-  }
-
-  /* 卡片 3D 懸浮與像素傾斜動畫 */
-  .card-3d {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    transform-style: preserve-3d;
-  }
-  .card-3d:hover {
-    transform: translateY(-6px) rotateX(3deg) rotateY(-2deg);
-    box-shadow: inset -4px -4px 0px #0d1117, inset 4px 4px 0px #f59e0b, 0 15px 30px rgba(0,0,0,0.9);
-  }
-
-  /* 彩虹發光動態外框 */
-  .rainbow-border {
-    position: relative;
-  }
-  .rainbow-border::before {
-    content: '';
-    position: absolute;
-    top: -4px; left: -4px; right: -4px; bottom: -4px;
-    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff2b, #00f0ff, #0026ff, #7a00ff, #ff00c8, #ff0000);
-    background-size: 400%;
-    z-index: -1;
-    filter: blur(6px);
-    animation: steam 20s linear infinite;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-  }
-  .rainbow-border:hover::before {
-    opacity: 1;
-  }
-  @keyframes steam {
-    0% { background-position: 0 0; }
-    50% { background-position: 400% 0; }
-    100% { background-position: 0 0; }
-  }
-
-  /* 各陣營專屬氛圍燈光 */
-  .glow-werewolf { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); border-color: #ef4444 !important; }
-  .glow-good { box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); border-color: #22c55e !important; }
-  .glow-neutral { box-shadow: 0 0 20px rgba(234, 179, 8, 0.4); border-color: #eab308 !important; }
-  .glow-server { box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); border-color: #38bdf8 !important; }
-  .glow-purple { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); border-color: #a855f7 !important; }
-  .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); border-color: #10b981 !important; }
-
-  /* Canvas 背景粒子 */
-  #bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -2;
-    pointer-events: none;
-  }
-</style>
+    /* Canvas 背景粒子 */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      pointer-events: none;
+    }
+    
+    /* 複製提示 Toast */
+    #toast {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+  </style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen relative overflow-x-hidden pb-12">
+<body class="bg-gray-950 text-gray-100 min-h-screen p-3 md:p-8 relative">
 
-  <!-- 右上角懸浮彩蛋按鈕 -->
-  <div class="fixed top-4 right-4 z-50">
-    <button id="easterEggBtn" onclick="toggleEasterEgg()" class="egg-btn px-3 py-1.5 text-xs text-white font-bold flex items-center gap-1.5 rounded-sm">
-      <i id="eggIcon" class="fa-solid fa-compact-disc text-amber-300"></i>
-      <span id="eggText">彩蛋</span>
-    </button>
-  </div>
-
-  <!-- 彩蛋音效檔 -->
-  <audio id="easterEggAudio" src="rickrollsound.mp3" preload="auto"></audio>
-
-  <!-- 背景動態飄落粒子 Canvas -->
+  <!-- 背景粒子 Canvas -->
   <canvas id="bg-canvas"></canvas>
 
-  <!-- 點陣特效飛濺 Canvas -->
-  <canvas id="burst-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-50"></canvas>
+  <!-- 提示 Toast 訊息 -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-amber-500 text-black font-bold px-4 py-2 border-2 border-black shadow-lg opacity-0 pointer-events-none translate-y-2">
+    <i class="fa-solid fa-check mr-2"></i><span id="toast-msg">已複製內容！</span>
+  </div>
 
-  <div class="max-w-6xl mx-auto px-4 pt-8">
-
+  <div class="max-w-6xl mx-auto">
     <!-- 頁頭標題卡片與主視覺照片 -->
     <header class="mc-box p-4 md:p-6 text-center relative overflow-hidden mb-8 rainbow-border">
       <!-- Minecraft 狼人殺主視覺橫幅海報照片 -->
-      <div class="relative w-full overflow-hidden border-4 border-black mb-6 shadow-2xl rounded-sm group">
-        <img src="IMG_3196.jpeg" alt="Minecraft 狼人殺封面海報" class="w-full h-auto object-cover max-h-[450px] transform group-hover:scale-105 transition-transform duration-500">
+      <div class="relative w-full overflow-hidden border-4 border-black mb-6 shadow-2xl rounded-sm group bg-gray-900 min-h-[180px] flex items-center justify-center">
+        <img src="IMG_3196.jpeg" alt="Minecraft 狼人殺封面海報" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=1200&q=80'" class="w-full h-auto object-cover max-h-[450px] transform group-hover:scale-105 transition-transform duration-500">
         
         <!-- 裝飾像素圖示疊加 -->
         <div class="absolute top-3 left-3 bg-black/70 border border-gray-700 p-1.5 flex items-center gap-2 rounded">
@@ -207,10 +171,10 @@
         <i class="fa-solid fa-crown mr-1"></i> MINECRAFT SERVER GUIDE
       </div>
       
-      <h1 class="text-3xl md:text-5xl font-extrabold tracking-wider text-amber-400 drop-shadow-[0_4px_0_#78350f] mb-3 flex items-center justify-center gap-3">
+      <h1 class="text-2xl md:text-5xl font-extrabold tracking-wider text-amber-400 drop-shadow-[0_4px_0_#78350f] mb-3 flex items-center justify-center gap-3">
         <!-- SVG 像素黃金劍 -->
         <svg class="w-8 h-8 text-amber-400 hidden sm:block transform -rotate-45" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M14 0h2v2h-2zM12 2h2v2h-2zM10 4h2v2h-2zM8 6h2v2H8zM6 8h2v2H6zM4 10h2v2H4zM0 14h2v2H0zM2 12h2v2H2zM0 12h2v2H0zM2 14h2v2H2z" />
+          <path d="M14 0h2v2h-2zM12 2h2v2h-2zM10 4h2v2H2zM8 6h2v2H8zM6 8h2v2H6zM4 10h2v2H4zM0 14h2v2H0zM2 12h2v2H2zM0 12h2v2H0zM2 14h2v2H2z" />
         </svg>
         <span>伺服器規章與狼人殺指南</span>
         <svg class="w-8 h-8 text-amber-400 hidden sm:block transform rotate-45" viewBox="0 0 16 16" fill="currentColor">
@@ -224,7 +188,7 @@
 
       <div class="mt-4 inline-flex items-center gap-2 bg-black/50 border border-gray-700 px-4 py-1.5 rounded-full text-xs text-gray-400">
         <i class="fa-regular fa-clock text-amber-400"></i>
-        <span>最後更新時間：<span class="text-amber-300 font-mono">2026/08/23 07:00</span></span>
+        <span>最後更新時間：<span class="text-amber-300 font-mono">2026/08/25</span></span>
       </div>
     </header>
 
@@ -384,7 +348,7 @@
               </svg>
             </div>
             <div class="text-xs font-bold text-amber-300">1. 白天時間</div>
-            <div class="text-[11px] text-gray-400 mt-1">發放每日道具、公佈死者與隨機效果</div>
+            <div class="text-[11px] text-gray-400 mt-1">無隨機效果。死訊於死亡當下立即公布（被狼人殺死無訊息）</div>
             <div class="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 text-amber-400 text-lg z-10">
               <i class="fa-solid fa-chevron-right"></i>
             </div>
@@ -398,7 +362,7 @@
               </svg>
             </div>
             <div class="text-xs font-bold text-indigo-300">2. 夜晚時間</div>
-            <div class="text-[11px] text-gray-400 mt-1">狼人殺人、神職技能發動、攝夢/傳教</div>
+            <div class="text-[11px] text-gray-400 mt-1">目前僅有聖誕老人與攝夢人可以晚上發動技能</div>
             <div class="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 text-indigo-400 text-lg z-10">
               <i class="fa-solid fa-chevron-right"></i>
             </div>
@@ -443,8 +407,8 @@
               每一輪遊戲會依照 <span class="text-amber-400">「白天時間 ➔ 夜晚時間 ➔ 辯論時間 ➔ 白天時間」</span> 的固定順序交替運作。
             </p>
             <ul class="list-disc pl-4 text-gray-400 space-y-1">
-              <li><b class="text-gray-200">白天時間：</b>獲得天數技能道具（如雞蛋、藥水、解藥等）。</li>
-              <li><b class="text-gray-200">夜晚時間：</b>夜間技能生效（狼人雪球/植入炸彈/下毒/血月、攝夢、傳教）。</li>
+              <li><b class="text-gray-200">白天時間：</b>獲得天數技能道具；白天沒有任何隨機效果，死訊會在死亡當下立即公布（被狼人殺死不會有訊息）。</li>
+              <li><b class="text-gray-200">夜晚時間：</b>目前只有聖誕老人與攝夢人可以晚上發動技能。</li>
               <li><b class="text-gray-200">辯論時間：</b>進行公開對質與投票，票數最高者將被放逐。</li>
             </ul>
           </div>
@@ -608,7 +572,7 @@
           </div>
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-gift text-xs"></i> 聖誕老人</h4>
-            <p class="text-xs text-gray-300">每天晚上可以贈送任意玩家禮物（10 金幣），且晚上期間會有一段時間隱身與速度加快。</p>
+            <p class="text-xs text-gray-300">每天晚上可以贈送任意玩家禮物（10 金幣），且晚上期間會有一段時間隱身與速度加快（夜間可發動技能）。</p>
           </div>
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-bullhorn text-xs"></i> 謠言學家</h4>
@@ -616,15 +580,15 @@
           </div>
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-bed text-xs"></i> 攝夢人</h4>
-            <p class="text-xs text-gray-300">每天晚上可以選擇攝夢一位玩家，該玩家明天將無法使用任何技能，無法連續攝夢同個玩家。</p>
+            <p class="text-xs text-gray-300">每天晚上可以選擇攝夢一位玩家，該玩家明天將無法使用任何技能，無法連續攝夢同個玩家（夜間可發動技能）。</p>
           </div>
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition">
             <h4 class="text-lg font-bold text-green-400 mb-1"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i> 指令大神</h4>
-            <p class="text-xs text-gray-300">一場遊戲中可以瞬間修復指令方塊一次；每 5 秒獲得 10 秒的隨機效果（效果結束才進冷卻）。</p>
+            <p class="text-xs text-gray-300">一場遊戲中可以瞬間修復指令方塊一次。</p>
           </div>
           <div class="role-card bg-gray-900/80 p-4 border border-green-900/50 hover:border-green-500 transition col-span-1 md:col-span-2 lg:col-span-3">
             <h4 class="text-lg font-bold text-gray-400 mb-1"><i class="fa-solid fa-person text-xs"></i> 村民</h4>
-            <p class="text-xs text-gray-400">沒有啥用處都沒有。</p>
+            <p class="text-xs text-gray-400">沒有特殊技能。</p>
           </div>
         </div>
       </section>
@@ -660,7 +624,7 @@
           </div>
           <div class="role-card bg-gray-900/80 p-4 border border-yellow-900/50 hover:border-yellow-500 transition">
             <h4 class="text-lg font-bold text-yellow-400 mb-1"><i class="fa-solid fa-book-bible text-xs"></i> 傳教士</h4>
-            <p class="text-xs text-gray-300">每晚會獲得一個叫「傳教」的物品並點擊右鍵對玩家使用。只要場上所有存活玩家都被成功傳教後即可直接獲勝。</p>
+            <p class="text-xs text-gray-300">白天即可獲得一個叫「傳教」的物品並點擊右鍵對玩家使用。只要場上所有存活玩家都被成功傳教後即可直接獲勝。</p>
           </div>
         </div>
       </section>
@@ -729,226 +693,154 @@
     <footer class="text-center text-xs text-gray-500 mt-12 py-6 border-t border-gray-800">
       <p>Minecraft Server Werewolf Game Document © 2026</p>
     </footer>
-
   </div>
 
-  <!-- Toast 訊息提示 -->
-  <div id="toast" class="fixed bottom-6 right-6 bg-amber-500 text-black px-4 py-2 border-2 border-black font-bold text-xs shadow-2xl transition-all opacity-0 translate-y-10 pointer-events-none flex items-center gap-2 z-50">
-    <i class="fa-solid fa-check-circle"></i> <span id="toast-msg">已複製！</span>
-  </div>
-
-<script>
-  // 8-bit Web Audio API 像素音效生成器
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  function playSound(type) {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    if (type === 'click') {
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.08);
-    } else if (type === 'hover') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
-    }
-  }
-
-  // 右上角彩蛋音樂開關控制
-  function toggleEasterEgg() {
-    const audio = document.getElementById('easterEggAudio');
-    const btn = document.getElementById('easterEggBtn');
-    const icon = document.getElementById('eggIcon');
-    const text = document.getElementById('eggText');
-
-    if (audio.paused) {
-      audio.play().then(() => {
-        btn.classList.add('playing');
-        icon.className = "fa-solid fa-circle-pause text-emerald-300";
-        text.innerText = "播放中...";
-        showToast("🎵 觸發彩蛋音樂！Never Gonna Give You Up!");
-      }).catch(err => {
-        showToast("⚠️ 請確定 rickrollsound.mp3 檔案已存在！");
-      });
-    } else {
-      audio.pause();
-      btn.classList.remove('playing');
-      icon.className = "fa-solid fa-compact-disc text-amber-300";
-      text.innerText = "彩蛋";
-    }
-  }
-
-  // 像素噴出爆裂特效 (Pixel Burst Effect)
-  const burstCanvas = document.getElementById('burst-canvas');
-  const bCtx = burstCanvas.getContext('2d');
-  let burstParticles = [];
-
-  function resizeBurstCanvas() {
-    burstCanvas.width = window.innerWidth;
-    burstCanvas.height = window.innerHeight;
-  }
-  resizeBurstCanvas();
-  window.addEventListener('resize', resizeBurstCanvas);
-
-  function createPixelBurst(x, y, color) {
-    const colors = color ? [color] : ['#f59e0b', '#ef4444', '#22c55e', '#38bdf8', '#fbbf24'];
-    for (let i = 0; i < 16; i++) {
-      burstParticles.push({
-        x: x,
-        y: y,
-        vx: (Math.random() - 0.5) * 8,
-        vy: (Math.random() - 0.5) * 8 - 2,
-        size: Math.floor(Math.random() * 4) + 4,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        life: 1.0
+  <script>
+    // 複製指令與 IP 腳本
+    function copyCmd(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`已成功複製：${text}`);
+      }).catch(() => {
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast(`已成功複製：${text}`);
       });
     }
-  }
 
-  function animateBurst() {
-    bCtx.clearRect(0, 0, burstCanvas.width, burstCanvas.height);
-    for (let i = burstParticles.length - 1; i >= 0; i--) {
-      const p = burstParticles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.2; // 重力
-      p.life -= 0.03;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.innerText = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+      }, 2500);
+    }
 
-      if (p.life <= 0) {
-        burstParticles.splice(i, 1);
-        continue;
+    // 頁籤切換邏輯
+    function switchTab(tab) {
+      const sections = {
+        'download': ['section-download'],
+        'flow': ['section-flow'],
+        'connection': ['section-connection'],
+        'rules': ['section-rules'],
+        'roles': ['section-roles'],
+        'commands': ['section-commands'],
+        'bug': ['section-bug']
+      };
+
+      // 更新按鈕 active 樣式
+      document.querySelectorAll('.mc-btn').forEach(btn => {
+        if(btn.id && btn.id.startsWith('tab-')) {
+          btn.classList.remove('active', 'text-amber-300');
+          btn.classList.add('text-gray-300');
+        }
+      });
+
+      const currentTabBtn = document.getElementById(`tab-${tab}`);
+      if(currentTabBtn) {
+        currentTabBtn.classList.add('active', 'text-amber-300');
+        currentTabBtn.classList.remove('text-gray-300');
       }
 
-      bCtx.fillStyle = p.color;
-      bCtx.globalAlpha = p.life;
-      bCtx.fillRect(p.x, p.y, p.size, p.size);
-    }
-    requestAnimationFrame(animateBurst);
-  }
-  animateBurst();
-
-  document.querySelectorAll('button, a, input, .role-card').forEach(el => {
-    el.addEventListener('mouseenter', (e) => {
-      playSound('hover');
-      const rect = el.getBoundingClientRect();
-      createPixelBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    });
-  });
-
-  // Canvas 背景粒子繪製
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  const particles = [];
-  for (let i = 0; i < 40; i++) {
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      size: Math.random() * 6 + 2,
-      speedY: Math.random() * 0.8 + 0.2,
-      speedX: (Math.random() - 0.5) * 0.3,
-      color: ['#f59e0b', '#ef4444', '#22c55e', '#38bdf8', '#a855f7'][Math.floor(Math.random() * 5)],
-      opacity: Math.random() * 0.6 + 0.2
-    });
-  }
-
-  function animateCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-      p.y -= p.speedY;
-      p.x += p.speedX;
-      if (p.y < -10) {
-        p.y = canvas.height + 10;
-        p.x = Math.random() * canvas.width;
+      // 切換區塊顯示
+      const allSectionIds = ['section-download', 'section-flow', 'section-connection', 'section-rules', 'section-roles', 'section-commands', 'section-bug'];
+      
+      if (tab === 'all') {
+        allSectionIds.forEach(id => {
+          const el = document.getElementById(id);
+          if(el) el.style.display = 'block';
+        });
+      } else {
+        allSectionIds.forEach(id => {
+          const el = document.getElementById(id);
+          if(el) {
+            if (sections[tab] && sections[tab].includes(id)) {
+              el.style.display = 'block';
+            } else {
+              el.style.display = 'none';
+            }
+          }
+        });
       }
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.opacity;
-      ctx.fillRect(p.x, p.y, p.size, p.size);
-    });
-    requestAnimationFrame(animateCanvas);
-  }
-  animateCanvas();
+    }
 
-  // 分頁切換功能
-  function switchTab(tabName) {
-    playSound('click');
-    const sections = {
-      'download': document.getElementById('section-download'),
-      'flow': document.getElementById('section-flow'),
-      'connection': document.getElementById('section-connection'),
-      'rules': document.getElementById('section-rules'),
-      'roles': document.getElementById('section-roles'),
-      'commands': document.getElementById('section-commands'),
-      'bug': document.getElementById('section-bug')
-    };
+    // 即時關鍵字搜尋角色
+    function filterRoles() {
+      const input = document.getElementById('roleSearch').value.toLowerCase();
+      const roleCards = document.querySelectorAll('.role-card');
 
-    ['all', 'download', 'flow', 'connection', 'rules', 'roles', 'commands', 'bug'].forEach(t => {
-      const btn = document.getElementById(`tab-${t}`);
-      if (btn) btn.classList.remove('active');
-    });
-    document.getElementById(`tab-${tabName}`).classList.add('active');
-
-    if (tabName === 'all') {
-      Object.values(sections).forEach(sec => sec.style.display = 'block');
-    } else {
-      Object.keys(sections).forEach(key => {
-        sections[key].style.display = (key === tabName) ? 'block' : 'none';
+      // 若搜尋時自動切換至全部或角色區
+      roleCards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if (text.includes(input)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
       });
     }
-  }
 
-  // 角色能力即時搜尋
-  function filterRoles() {
-    const query = document.getElementById('roleSearch').value.toLowerCase();
-    document.querySelectorAll('.role-card').forEach(card => {
-      card.style.display = card.textContent.toLowerCase().includes(query) ? 'block' : 'none';
-    });
-  }
+    // Canvas 背景紅石/星空粒子動態效果
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
 
-  // 複製剪貼簿（相容安全性限制與舊版瀏覽器）
-  function copyCmd(text) {
-    playSound('click');
-    
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text);
-    } else {
-      const dummy = document.createElement('textarea');
-      document.body.appendChild(dummy);
-      dummy.value = text;
-      dummy.select();
-      document.execCommand('copy');
-      document.body.removeChild(dummy);
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedY = -(Math.random() * 0.8 + 0.2);
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.alpha = Math.random() * 0.6 + 0.2;
+        this.color = Math.random() > 0.5 ? '#ef4444' : '#f59e0b'; // 紅石紅 / 琥珀黃
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        if (this.y < 0 || this.x < 0 || this.x > canvas.width) {
+          this.reset();
+          this.y = canvas.height + 10;
+        }
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.alpha;
+        ctx.fillRect(this.x, this.y, this.size, this.size);
+      }
     }
 
-    showToast(`已複製：${text}`);
-  }
+    for (let i = 0; i < 65; i++) {
+      particles.push(new Particle());
+    }
 
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toast-msg').innerText = msg;
-    toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-    setTimeout(() => {
-      toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-    }, 2500);
-  }
-</script>
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
 </body>
 </html>
